@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer/Footer'
-import './globals.css';
+import '../globals.css'
 import Header from '@/components/Header/Header'
 import Providers from '@/redux/providers'
 import { ToastContainer } from 'react-toastify';
