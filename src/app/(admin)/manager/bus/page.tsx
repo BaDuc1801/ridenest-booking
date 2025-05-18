@@ -92,11 +92,12 @@ const BusManager = () => {
             toast.success('Cập nhật bus thành công');
         } catch (error) {
             setLoading(false)
+            console.log(error)
             toast.error('Lỗi cập nhật bus');
         }
     };
 
-    const handleInputChange = (value: any, name: any) => {
+    const handleInputChange = (value: any, name: string) => {
         setbusForm((prevForm) => ({
             ...prevForm,
             [name]: value,
