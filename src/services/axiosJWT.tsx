@@ -7,7 +7,7 @@ const axiosJWT = axios.create();
 axiosJWT.interceptors.request.use(
     async (config) => {
         const currentTime = new Date();
-        const access_token : any = userService.getAccessToken();
+        const access_token : string = userService.getAccessToken();
         const decoded = jwtDecode(access_token);
         
         if (decoded?.exp && decoded.exp < currentTime.getTime() / 1000) {

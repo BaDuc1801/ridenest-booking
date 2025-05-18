@@ -57,6 +57,7 @@ const userService = {
         } catch (error) {
             if (!hasToastShown) {
                 toast.info("Phiên đăng nhập hết hạn");
+                console.log(error)
                 hasToastShown = true;
             }
             localStorage.removeItem('access_token');
@@ -100,7 +101,7 @@ const userService = {
 
     changePassword: async (oldP: string, newP: string) => {
         const accessToken = userService.getAccessToken()
-        const res = await axiosJWT.put(`${userUrl}/change-password`, { oldP, newP }, {
+        await axiosJWT.put(`${userUrl}/change-password`, { oldP, newP }, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }

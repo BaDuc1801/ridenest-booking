@@ -1,6 +1,5 @@
 import axiosJWT from "./axiosJWT";
 import { IReview } from "./reviewService";
-import { ISchedule } from "./scheduleService";
 import userService from "./userService";
 
 export interface ITicket {

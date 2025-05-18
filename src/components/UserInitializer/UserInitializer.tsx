@@ -19,6 +19,7 @@ const UserInitializer = () => {
       } catch (error) {
         dispatch(resetUser());
         localStorage.removeItem('access_token');
+        console.log(error)
       }
     };
 
