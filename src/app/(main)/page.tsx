@@ -32,7 +32,6 @@ const Main = () => {
 
   return (
     <div>
-
       <SearchSection />
       <div className='lg:w-[1000px] md:w-[700px] md:mx-auto mx-[20px] flex flex-col gap-[50px] my-[50px]'>
         <RouteList />
