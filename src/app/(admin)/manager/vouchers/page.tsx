@@ -5,7 +5,6 @@ import voucherService, { IVoucher } from '@/services/voucherService';
 import { Button, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Table, Tabs } from 'antd';
 const { Option } = Select;
 import TextArea from 'antd/es/input/TextArea';
-import Item from 'antd/es/list/Item';
 import React, { useState } from 'react'
 import { FaTrash } from 'react-icons/fa';
 import { RiEditFill } from 'react-icons/ri';
@@ -57,6 +56,7 @@ const VoucherManage = () => {
             setConfirmDelete(false);
             toast.success('Xóa voucher thành công');
         } catch (error) {
+            console.log(error)
             toast.error('Lỗi khi xóa voucher');
         }
     };
@@ -71,15 +71,16 @@ const VoucherManage = () => {
             if (selectedvoucher && selectedvoucher._id)
                 await voucherService.updateVoucher(selectedvoucher._id, voucherForm);
             const rs = await voucherService.getAllVouchers();
-            dispatch(setListVoucher(rs));   
+            dispatch(setListVoucher(rs));
             setIsEditModalVisible(false);
             toast.success('Cập nhật voucher thành công');
         } catch (error) {
+            console.log(error)
             toast.error('Lỗi cập nhật voucher');
         }
     };
 
-    const handleInputChange = (e: any) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setvoucherForm((prevForm) => ({
             ...prevForm,
@@ -120,20 +121,20 @@ const VoucherManage = () => {
             title: 'Người tạo',
             dataIndex: 'createdBy',
             key: 'createdBy',
-            render: (text: any) => {
+            render: (text: { username: string }) => {
                 return <p>{text.username}</p>
             }
         },
         {
             title: 'Chỉnh sửa',
-            render: (_text: any, record: any) => (
+            render: (_text: unknown, record: IVoucher) => (
                 <div className="flex cursor-pointer text-lg gap-5">
                     <p onClick={() => handleEdit(record)}>
                         <RiEditFill />
                     </p>
                     <p
                         className="text-red-500"
-                        onClick={() => handleDelete(record._id)}
+                        onClick={() => record._id && handleDelete(record._id)}
                     >
                         <FaTrash />
                     </p>
@@ -144,7 +145,15 @@ const VoucherManage = () => {
 
     const [form] = Form.useForm();
 
-    const onFinish = async (values: any) => {
+    const onFinish = async (values: {
+        code: string;
+        name: string;
+        discount: number;
+        discountType: 'percent' | 'fixed';
+        count: number;
+        expiryDate: string;
+        description: string;
+    }) => {
         try {
             const formattedExpiryDate = formattedDatePicker(values.expiryDate);
             await voucherService.createVoucher({
@@ -156,6 +165,7 @@ const VoucherManage = () => {
             const rs = await voucherService.getAllVouchers();
             dispatch(setListVoucher(rs));
         } catch (error) {
+            console.log(error)
             toast.error('Error creating voucher');
         }
     };

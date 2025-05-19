@@ -21,6 +21,7 @@ const Login = () => {
       router.push("/")
     } catch (error) {
       setLoading(false);
+      console.log(error)
       form.setFields([
         {
           name: 'password',

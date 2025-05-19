@@ -31,12 +31,16 @@ const busService = {
     return rs.data
   },
 
-  updateBus: async (busId: string, data: any) => {
+  updateBus: async (busId: string, data: { status: string }) => {
     const rs = await axiosJWT.put(`${busUrl}/update/${busId}`, data);
     return rs.data;
   },
 
-  createBus: async (data: any) => {
+  createBus: async (data: {
+    totalSeats: string,
+    owner: string,
+    licensePlate: string
+  }) => {
     const rs = await axiosJWT.post(`${busUrl}/add`, data);
     return rs.data;
   },

@@ -19,7 +19,7 @@ const Schedule = () => {
     const [user, setUser] = useState<IUser>()
     const [loading, setLoading] = useState<boolean>(false)
 
-    const disabledDate = (current: any) => {
+    const disabledDate = (current: dayjs.Dayjs) => {
         return current && current < dayjs().endOf('day');
     };
 
@@ -31,9 +31,9 @@ const Schedule = () => {
                 const user = await userService.getUserInformation()
                 setUser(user)
                 if (user?.role === "Operator") {
-                    allBus = allBus.filter((bus: any) => bus.owner === user.owner);
-                    let busIds = allBus.map((bus: any) => bus._id);
-                    listSchedule = listSchedule.filter((listSchedule: any) => busIds.includes(listSchedule.busId._id));
+                    allBus = allBus.filter((bus: IBus) => bus.owner === user.owner);
+                    const busIds = allBus.map((bus: IBus) => bus._id);
+                    listSchedule = listSchedule.filter((listSchedule: ISchedule) => busIds.includes(listSchedule.busId._id));
                     setListSchedule(listSchedule);
                     setListBus(allBus);
 
@@ -78,11 +78,12 @@ const Schedule = () => {
         try {
             setLoading(true)
             await scheduleService.deleteSchedule(scheduleIdToDelete);
-            setListSchedule(listSchedule.filter((schedule: any) => schedule._id !== scheduleIdToDelete));
+            setListSchedule(listSchedule.filter((schedule: ISchedule) => schedule._id !== scheduleIdToDelete));
             setConfirmDelete(false);
             setLoading(false)
             toast.success('Xóa lịch trình thành công');
         } catch (error) {
+            console.log(error)
             setLoading(false)
             toast.error('Lỗi khi xóa lịch trình');
         }
@@ -98,7 +99,7 @@ const Schedule = () => {
             setLoading(true)
             if (selectedSchedule)
                 await scheduleService.updateSchedule(selectedSchedule?._id, scheduleForm)
-            let rs = await scheduleService.getAllSchedules()
+            const rs = await scheduleService.getAllSchedules()
             setListSchedule(user?.role === "Operator"
                 ? rs.filter((schedule: ISchedule) => schedule.busId.owner === user.owner)
                 : rs
@@ -107,12 +108,13 @@ const Schedule = () => {
             setLoading(false)
             toast.success('Cập nhật lịch trình thành công');
         } catch (error) {
+            console.log(error)
             setLoading(false)
             toast.error('Lỗi cập nhật lịch trình');
         }
     };
 
-    const handleInputChange = (e: any) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setScheduleForm((prevForm) => ({
             ...prevForm,
@@ -149,7 +151,7 @@ const Schedule = () => {
             title: 'Thời gian đi',
             dataIndex: 'startTime',
             key: 'startTime',
-            render: (text: any) => {
+            render: (text: string) => {
                 return <p>{new Date(text).toLocaleDateString('UTC')} - {new Date(text).toLocaleTimeString('UTC', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })}</p>
             }
         },
@@ -157,7 +159,7 @@ const Schedule = () => {
             title: 'Thời gian đến',
             dataIndex: 'endTime',
             key: 'endTime',
-            render: (text: any) => {
+            render: (text: string) => {
                 return <p>{new Date(text).toLocaleDateString('UTC')} - {new Date(text).toLocaleTimeString('UTC', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })}</p>
             }
         },
@@ -176,7 +178,7 @@ const Schedule = () => {
         },
         {
             title: 'Chỉnh sửa',
-            render: (_text: any, record: ISchedule) => (
+            render: (_text: unknown, record: ISchedule) => (
                 <div className="flex cursor-pointer text-lg gap-5">
                     <p onClick={() => handleEdit(record)}>
                         <RiEditFill />
@@ -194,7 +196,15 @@ const Schedule = () => {
 
     const [form] = Form.useForm();
 
-    const onFinish = async (values: any) => {
+    const onFinish = async (values: {
+        startTime : string,
+        endTime : string,
+        routeId : string,
+        busId : string,
+        front : number,
+        middle : number,
+        back : number
+    }) => {
         try {
             setLoading(true)
             const formattedStartTime = dayjs(values.startTime).format('YYYY-MM-DDTHH:mm:ss');
@@ -218,6 +228,7 @@ const Schedule = () => {
             );
             toast.success('Tạo lịch trình thành công');
         } catch (error) {
+            console.log(error)
             setLoading(false)
             toast.error('Lỗi khi thêm lịch trình');
         }

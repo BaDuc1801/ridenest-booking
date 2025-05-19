@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Form, Input, Modal, Rate, Table, Tabs } from 'antd'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoInformationCircle } from 'react-icons/io5'
 import { FiXCircle } from 'react-icons/fi'
 import { GoCodeReview } from 'react-icons/go'
@@ -111,7 +111,7 @@ const UserStorage = () => {
             title: 'Chi tiết',
             dataIndex: '_id',
             key: '_id',
-            render: (_blank: any, record: any) => {
+            render: (_blank: unknown, record: ITicket) => {
                 return (
                     <p
                         className="cursor-pointer text-xl text-blue-900"

@@ -36,12 +36,25 @@ const scheduleService = {
         return rs.data
     },
 
-    createSchedule: async (data: any) => {
+    createSchedule: async (data: {
+        routeId: string,
+        busId: string,
+        startTime: string,
+        endTime: string,
+        price: {
+            front: number,
+            middle: number,
+            back: number
+        }
+    }) => {
         const rs = await axiosJWT.post(`${scheduleUrl}`, data);
         return rs.data
     },
 
-    updateSchedule: async (id: string, data: any) => {
+    updateSchedule: async (id: string, data: {
+        startTime: string,
+        endTime: string,
+    }) => {
         const rs = await axiosJWT.put(`${scheduleUrl}/update/${id}`, data);
         return rs.data
     },

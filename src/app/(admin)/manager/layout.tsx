@@ -32,7 +32,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
             }
         };
         fetchData();
-    }, [pathname]);
+    }, [pathname, router]);
 
     const items = [
         { key: 'users', label: 'Danh sách người dùng', icon: <FaUser /> },

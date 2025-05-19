@@ -8,7 +8,7 @@ const Page = () => {
 
   useEffect(() => {
     router.push("/manager/users");
-  }, []);
+  }, [router]);
 
   return (
     <div></div>

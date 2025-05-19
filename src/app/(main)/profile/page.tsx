@@ -32,7 +32,12 @@ const Profile = () => {
         }
     }, [user]);
 
-    const onValuesChange = (changedValues: any) => {
+    const onValuesChange = (changedValues: Partial<{
+        username: string;
+        email: string;
+        phoneNumber: string;
+        avatar?: string;
+    }>) => {
         setIsChanged(
             changedValues.username !== user?.username ||
             changedValues.email !== user?.email ||
@@ -41,10 +46,15 @@ const Profile = () => {
         );
     }
 
-    const onFinish = async (value: any) => {
+    const onFinish = async (value: {
+        username: string;
+        email: string;
+        phoneNumber: string;
+        avatar?: string;
+    }) => {
         try {
             setLoading(true)
-            let formData = new FormData();
+            const formData = new FormData();
             if (selectedImage) {
                 formData.append('avatar', selectedImage);
                 const updatedUser = await userService.updateAvatar(formData);
@@ -52,26 +62,29 @@ const Profile = () => {
                 dispatch(setUserAvatar(updatedUser.user))
             }
             if (value.username !== user?.username || value.email !== user?.email || value.phoneNumber !== user?.phoneNumber) {
-                const updatedUser: any = await userService.updateUser(value)
+                const updatedUser = await userService.updateUser(value)
                 dispatch(setUser(updatedUser))
             }
             setLoading(false)
             toast.success('Cập nhật thông tin thành công');
             setIsChanged(false)
         } catch (error) {
+            console.log(error)
             setLoading(false)
-            notification.error({ message: 'Lỗi' });
+            toast.error("Cập nhật thông tin thất bại");
         }
     }
 
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState(user?.avatar);
 
-    const handleFileChange = (e: any) => {
-        const file = e.target.files[0];
-        if (file) {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (files && files[0]) {
+            const file = files[0];
             setSelectedImage(file);
             setImagePreview(URL.createObjectURL(file));
+            setIsChanged(true);
         }
     };
 
@@ -105,8 +118,8 @@ const Profile = () => {
                                 accept="image/*"
                                 onChange={(e) => {
                                     handleFileChange(e);
-                                    onValuesChange(e);
-                                }} name='avatar'
+                                }}
+                                name='avatar'
                             />
                         </div>
                     </Col>

@@ -23,7 +23,7 @@ const FormSearch = (props: { check: number; search: ISearch }) => {
 
     const [form] = Form.useForm()
 
-    const disabledDate = (current: any) => {
+    const disabledDate = (current: dayjs.Dayjs) => {
         return current && current < dayjs().endOf('day');
     };
 
@@ -47,7 +47,7 @@ const FormSearch = (props: { check: number; search: ISearch }) => {
     useEffect(() => {
         const bookingDate = search.booking_date;
 
-        let temp: any = null;
+        let temp: dayjs.Dayjs | [dayjs.Dayjs, dayjs.Dayjs | null] | null = null;
 
         if (bookingDate) {
             if (Array.isArray(bookingDate)) {

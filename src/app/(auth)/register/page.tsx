@@ -18,6 +18,7 @@ const Register = () => {
             setLoading(false);
             router.push('/login');
         } catch (error) {
+            console.log(error)
             setLoading(false);
             form.setFields([
                 {

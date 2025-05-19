@@ -130,7 +130,7 @@ const ListTicket = () => {
             title: 'Chi tiết',
             dataIndex: '_id',
             key: '_id',
-            render: (_blank: any, record: ITicket) => {
+            render: (_blank: unknown, record: ITicket) => {
                 return (
                     <p
                         className="cursor-pointer text-xl text-blue-900"
@@ -147,7 +147,7 @@ const ListTicket = () => {
         ...((user?.role !== "Operator" && activeTab === '1') ? [{
             title: 'Hủy vé',
             dataIndex: 'status',
-            render: (_blank: any, record: ITicket) => {
+            render: (_blank: unknown, record: ITicket) => {
                 return <p
                     className="cursor-pointer text-xl text-red-500"
                     onClick={() => {

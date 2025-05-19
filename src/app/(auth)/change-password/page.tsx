@@ -15,7 +15,7 @@ const ChangePassword = () => {
         if (!userService.getAccessToken()) {
             router.push("/")
         }
-    }, [])
+    }, [router])
 
     const onFinish = async (value: { oldP: string, newP: string }) => {
         try {

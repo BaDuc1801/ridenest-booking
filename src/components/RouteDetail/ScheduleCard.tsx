@@ -11,7 +11,6 @@ import { useRouter } from 'next/navigation'
 import userService from '@/services/userService'
 import Link from 'next/link'
 import ReviewCard from './ReviewCard'
-// import ReviewCard from './ReviewCard'
 
 const ScheduleCard = ({ item }: { item: ISchedule }) => {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
@@ -38,7 +37,7 @@ const ScheduleCard = ({ item }: { item: ISchedule }) => {
         setRv(pre => !pre)
     }
 
-    const handleImageClick = (index: any) => {
+    const handleImageClick = (index: number) => {
         setSelectedImageIndex(index)
     }
 
@@ -111,8 +110,8 @@ const ScheduleCard = ({ item }: { item: ISchedule }) => {
                 totalSeats: item.busId.totalSeats,
                 seatNumber: selectedSeats
             }))
-            let temp_origin: string = search.origin
-            let temp_destination: string = search.destination
+            const temp_origin: string = search.origin
+            const temp_destination: string = search.destination
             dispatch(setDestination(temp_origin))
             dispatch(setOrigin(temp_destination))
             dispatch(setTicketDeparturePrice(totalPrice))
@@ -204,10 +203,11 @@ const ScheduleCard = ({ item }: { item: ISchedule }) => {
                         slidesToShow={3}
                         slidesToScroll={1}
                     >
-                        {item?.busId?.img.map((image: any, index: any) => (
+                        {item?.busId?.img.map((image: string, index: number) => (
                             <div
                                 className='h-36 p-2 mt-2'
                                 onClick={() => handleImageClick(index)}
+                                key={index}
                             >
                                 <img
                                     className={`w-full h-full ${selectedImageIndex === index

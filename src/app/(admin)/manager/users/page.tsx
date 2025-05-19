@@ -59,7 +59,7 @@ const ListUser = () => {
             title: 'Chỉnh sửa',
             dataIndex: '',
             key: '',
-            render: (_text: any, record: IUser) => (
+            render: (_text: unknown, record: IUser) => (
                 <div className="flex cursor-pointer text-lg gap-5">
                     <p onClick={() => handleEdit(record)}>
                         <RiEditFill />
@@ -87,7 +87,7 @@ const ListUser = () => {
         fetchData();
     }, []);
 
-    const handleEdit = (user: any) => {
+    const handleEdit = (user: IUser) => {
         setSelectedUser(user);
         setRouteForm({
             username: user.username,
@@ -97,7 +97,7 @@ const ListUser = () => {
         setIsEditModalVisible(true);
     };
 
-    const handleDelete = (userId: any) => {
+    const handleDelete = (userId: string) => {
         setUserIdToDelete(userId);
         setConfirmDelete(true);
     };
@@ -111,6 +111,7 @@ const ListUser = () => {
             setConfirmDelete(false);
             toast.success('Xóa người dùng thành công');
         } catch (error) {
+            console.log(error)
             setLoading(false)
             toast.error('Lỗi khi xóa người dùng');
         }
@@ -133,12 +134,13 @@ const ListUser = () => {
                 toast.success('Cập nhật người dùng thành công');
             }
         } catch (error) {
+            console.log(error)
             setLoading(false)
             toast.error('Lỗi cập nhật người dùng');
         }
     };
 
-    const handleInputChange = (e: any) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setRouteForm((prevForm) => ({
             ...prevForm,
@@ -149,7 +151,7 @@ const ListUser = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const filteredUser = (users: IUser[]) => {
-        return users.filter((user: any) => {
+        return users.filter((user: IUser) => {
             const { email, phoneNumber, username, role, owner } = user;
             return (
                 email?.toLowerCase().includes(searchQuery.toLowerCase()) ||

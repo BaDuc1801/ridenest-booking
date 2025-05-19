@@ -79,7 +79,12 @@ const userService = {
         return res.data
     },
 
-    updateUser: async (data: any) => {
+    updateUser: async (data: {
+        username: string;
+        email: string;
+        phoneNumber: string;
+        avatar?: string;
+    }) => {
         const accessToken = userService.getAccessToken();
         const res = await axiosJWT.put(`${userUrl}/update-user`, data, {
             headers: {
@@ -118,12 +123,21 @@ const userService = {
         return res.data
     },
 
-    updateUserById: async (userId: string, data: any) => {
+    updateUserById: async (userId: string, data: {
+        username: string,
+        email: string,
+        phoneNumber: string,
+    }) => {
         const res = await axiosJWT.put(`${userUrl}/userId/${userId}`, data)
         return res.data
     },
 
-    addOperator: async (data : any) => {
+    addOperator: async (data: {
+        username: string;
+        email: string;
+        phoneNumber: string;
+        owner: string;
+    }) => {
         const res = await axiosJWT.put(`${userUrl}/email`, data)
         return res.data
     },

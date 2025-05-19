@@ -3,7 +3,7 @@
 import { setListRoute } from '@/redux/routeStore';
 import routeService, { IRoute } from '@/services/routeService';
 import { Button, Col, Form, Input, Modal, Row, Table, Tabs } from 'antd';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { FaTrash } from 'react-icons/fa';
 import { RiEditFill } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,22 +21,22 @@ const RouteManage = () => {
     const [routeForm, setRouteForm] = useState({
         origin: '',
         destination: '',
-        basisPrice: '',
-        afterDiscount: '',
+        basisPrice: 0,
+        afterDiscount: 0,
     });
 
-    const handleEdit = (route: any) => {
+    const handleEdit = (route: IRoute) => {
         setSelectedRoute(route);
         setRouteForm({
             origin: route.origin || '',
             destination: route.destination || '',
-            basisPrice: route.basisPrice || '',
-            afterDiscount: route.afterDiscount || '',
+            basisPrice: route.basisPrice,
+            afterDiscount: route.afterDiscount,
         });
         setIsEditModalVisible(true);
     };
 
-    const handleDelete = (route: any) => {
+    const handleDelete = (route: string) => {
         setRouteIdToDelete(route);
         setConfirmDelete(true);
     };
@@ -49,6 +49,7 @@ const RouteManage = () => {
             setConfirmDelete(false);
             toast.success('Xóa tuyến đường thành công');
         } catch (error) {
+            console.log(error)
             toast.error('Lỗi khi xóa tuyến đường');
         }
     };
@@ -68,15 +69,16 @@ const RouteManage = () => {
                 toast.success('Cập nhật tuyến đường thành công');
             }
         } catch (error) {
+            console.log(error)
             toast.error('Lỗi cập nhật tuyến đường');
         }
     };
 
-    const handleInputChange = (e: any) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setRouteForm((prevForm) => ({
             ...prevForm,
-            [name]: value,
+            [name]: name === 'basisPrice' || name === 'afterDiscount' ? Number(value) : value,
         }));
     };
 
@@ -103,14 +105,14 @@ const RouteManage = () => {
         },
         {
             title: 'Chỉnh sửa',
-            render: (_text: any, record: IRoute) => (
+            render: (_text: unknown, record: IRoute) => (
                 <div className="flex cursor-pointer text-lg gap-5">
                     <p onClick={() => handleEdit(record)}>
                         <RiEditFill />
                     </p>
                     <p
                         className="text-red-500"
-                        onClick={() => handleDelete(record._id)}
+                        onClick={() => record._id && handleDelete(record._id)}
                     >
                         <FaTrash />
                     </p>
@@ -121,7 +123,12 @@ const RouteManage = () => {
 
     const [form] = Form.useForm();
 
-    const onFinish = async (values: any) => {
+    const onFinish = async (values: {
+        origin: string;
+        destination: string;
+        basisPrice: number;
+        afterDiscount: number;
+    }) => {
         try {
             await routeService.createRoute({
                 ...values, img: "https://f1e425bd6cd9ac6.cmccloud.com.vn/cms-tool/destination/images/25/img_hero.png"
@@ -131,6 +138,7 @@ const RouteManage = () => {
             const rs = await routeService.getAllRoutes();
             dispatch(setListRoute(rs));
         } catch (error) {
+            console.log(error)
             toast.error('Lỗi khi tạo tuyến đường');
         }
     };

@@ -37,7 +37,12 @@ const voucherService = {
         return rs.data
     },
 
-    updateVoucher: async (id: string, data : any) => {
+    updateVoucher: async (id: string, data: {
+        code: string,
+        name: string,
+        description: string,
+        expiryDate: string
+    }) => {
         const rs = await axiosJWT.put(`${routeUrl}/${id}`, data);
         return rs.data
     },

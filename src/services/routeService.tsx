@@ -11,7 +11,7 @@ export interface IRoute {
     origin: string;
     destination: string;
     basisPrice: number;
-    afterDiscount?: number;
+    afterDiscount: number;
     schedules?: ISchedule[];
 }
 
@@ -26,14 +26,18 @@ const routeService = {
         return rs.data
     },
 
-    findSchedule: async (params: any) => {
+    findSchedule: async (params: {
+        origin?: string;
+        destination?: string;
+        startTime?: string | null;
+    }) => {
         const rs = await axios.get(`${routeUrl}/find-schedule`, {
             params: params
         })
         return rs.data
     },
 
-    updateSchedule: async (id: string, routeForm: { origin: string; destination: string; basisPrice: string; afterDiscount: string; }) => {
+    updateSchedule: async (id: string, routeForm: { origin: string; destination: string; basisPrice: number; afterDiscount: number; }) => {
         const rs = await axiosJWT.put(`${routeUrl}/${id}`, routeForm)
         return rs.data
     },

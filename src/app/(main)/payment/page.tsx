@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Radio, Input, Form, Modal } from 'antd';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsShieldFillCheck } from 'react-icons/bs';
 import { RiDiscountPercentFill } from 'react-icons/ri';
 import { FaCircleCheck } from 'react-icons/fa6';
@@ -43,16 +43,18 @@ const Payment = () => {
 
     const onFinish = async (value: { email: string, username: string, phoneNumber: string, paymentMethod: string }) => {
         isLoading(true);
-        search.departure &&
+        if (search.departure) {
             await scheduleService.bookSeat({ scheduleId: search.departure.scheduleId, seatNumber: search.departure.seatNumber });
+        }
         if (value.paymentMethod === "direct") {
             if (search.return && search.departure) {
                 await scheduleService.bookSeat({ scheduleId: search.return.scheduleId, seatNumber: search.return.seatNumber });
                 await ticketService.postTicket({ email: value.email, username: value.username, status: "waiting", phoneNumber: value.phoneNumber, price: search.ticketPrice.departurePrice, userId: user._id, paymentMethod: "direct", voucher: selectedVoucher?._id, scheduleId: search.departure.scheduleId, seatNumbers: search.departure.seatNumber });
                 await ticketService.postTicket({ email: value.email, username: value.username, status: "waiting", phoneNumber: value.phoneNumber, price: search.ticketPrice.departurePrice, userId: user._id, paymentMethod: "direct", voucher: selectedVoucher?._id, scheduleId: search.return.scheduleId, seatNumbers: search.return.seatNumber, });
             } else {
-                search.departure &&
+                if (search.departure) {
                     await ticketService.postTicket({ email: value.email, username: value.username, status: "waiting", phoneNumber: value.phoneNumber, price: total, userId: user._id, paymentMethod: "direct", voucher: selectedVoucher?._id, scheduleId: search.departure.scheduleId, seatNumbers: search.departure.seatNumber, });
+                }
             }
             setModal(pre => !pre);
         } else {
@@ -61,8 +63,9 @@ const Payment = () => {
                 await ticketService.postTicket({ email: value.email, username: value.username, status: "booked", phoneNumber: value.phoneNumber, price: search.ticketPrice.departurePrice, userId: user._id, paymentMethod: "bank", voucher: selectedVoucher?._id, scheduleId: search.departure.scheduleId, seatNumbers: search.departure.seatNumber });
                 await ticketService.postTicket({ email: value.email, username: value.username, status: "booked", phoneNumber: value.phoneNumber, price: search.ticketPrice.departurePrice, userId: user._id, paymentMethod: "bank", voucher: selectedVoucher?._id, scheduleId: search.return.scheduleId, seatNumbers: search.return.seatNumber, });
             } else {
-                search.departure &&
+                if (search.departure) {
                     await ticketService.postTicket({ email: value.email, username: value.username, status: "booked", phoneNumber: value.phoneNumber, price: total, userId: user._id, paymentMethod: "bank", voucher: selectedVoucher?._id, scheduleId: search.departure.scheduleId, seatNumbers: search.departure.seatNumber, })
+                }
             }
             setqr(pre => !pre);
         }

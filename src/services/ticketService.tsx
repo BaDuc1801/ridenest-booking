@@ -1,5 +1,6 @@
 import axiosJWT from "./axiosJWT";
 import { IReview } from "./reviewService";
+import { ISchedule } from "./scheduleService";
 import userService from "./userService";
 
 export interface ITicket {
@@ -7,7 +8,7 @@ export interface ITicket {
     userId: string;
     status: string;
     paymentMethod: string;
-    scheduleId: any;
+    scheduleId: ISchedule;
     seatNumbers: string[];
     price: number;
     phoneNumber: string;
@@ -23,7 +24,27 @@ const apiUrl = process.env.NEXT_PUBLIC_BE_URL;
 const ticketUrl = `${apiUrl}/tickets`;
 
 const ticketService = {
-    postTicket: async (data: ITicket) => {
+    postTicket: async (data: {
+        email: string,
+        username: string,
+        status: string,
+        phoneNumber: string,
+        price: number,
+        userId: string,
+        paymentMethod: string,
+        voucher: string | undefined,
+        scheduleId: {
+            scheduleId: string;
+            startTime: string;
+            endTime: string;
+            busId: string;
+            licensePlate: string;
+            totalSeats: number;
+            seatNumber: string[];
+        },
+        seatNumbers: string[]
+
+    }) => {
         const rs = await axiosJWT.post(`${ticketUrl}`, data);
         return rs.data
     },
