@@ -8,6 +8,8 @@ import { MdOutlineFileUpload } from 'react-icons/md';
 import userService, { IUser } from '@/services/userService';
 import busService, { IBus } from '@/services/busService';
 import { toast } from 'react-toastify';
+import type { UploadFile } from 'antd/es/upload/interface';
+
 const { Option } = Select;
 
 const BusManager = () => {
@@ -97,7 +99,7 @@ const BusManager = () => {
         }
     };
 
-    const handleInputChange = (value: any, name: string) => {
+    const handleInputChange = (value: string, name: string) => {
         setbusForm((prevForm) => ({
             ...prevForm,
             [name]: value,
@@ -132,7 +134,7 @@ const BusManager = () => {
         },
         {
             title: 'Chỉnh sửa',
-            render: (_text: any, record: IBus) => (
+            render: (_text: unknown, record: IBus) => (
                 <div className="flex cursor-pointer text-lg gap-5">
                     <p onClick={() => handleEdit(record)}>
                         <RiEditFill />
@@ -150,7 +152,12 @@ const BusManager = () => {
 
     const [form] = Form.useForm();
 
-    const onFinish = async (values: any) => {
+    const onFinish = async (values: {
+        totalSeats: string;
+        owner: string;
+        licensePlate: string;
+        img: UploadFile[];
+    }) => {
         try {
             setLoading(true)
             const response = await busService.createBus({
@@ -163,8 +170,10 @@ const BusManager = () => {
             const files = form.getFieldValue('img');
 
             const formData = new FormData();
-            files.forEach((file: any) => {
-                formData.append('img', file.originFileObj);
+            files.forEach((file: UploadFile) => {
+                if (file.originFileObj) {
+                    formData.append('img', file.originFileObj as Blob);
+                }
             });
             await busService.updateImg(busId, formData);
             const rs = await busService.getAllBus()
@@ -267,6 +276,13 @@ const BusManager = () => {
 
                                 <Form.Item
                                     name="img"
+                                    // valuePropName="fileList"
+                                    // getValueFromEvent={(e) => {
+                                    //     if (Array.isArray(e)) {
+                                    //         return e;
+                                    //     }
+                                    //     return e?.fileList;
+                                    // }}
                                     rules={[{ required: true, message: 'Vui lòng upload ảnh!' }]}
                                 >
                                     <Upload
