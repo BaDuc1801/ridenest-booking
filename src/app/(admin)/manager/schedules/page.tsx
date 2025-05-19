@@ -221,7 +221,7 @@ const Schedule = () => {
                 }
             })
             setLoading(false)
-            let rs = await scheduleService.getAllSchedules()
+            const rs = await scheduleService.getAllSchedules()
             setListSchedule(user?.role === "Operator"
                 ? rs.filter((schedule: ISchedule) => schedule.busId.owner === user.owner)
                 : rs

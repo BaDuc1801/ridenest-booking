@@ -2,7 +2,7 @@
 
 import { setUser, setUserAvatar } from '@/redux/userStore';
 import userService, { IUser } from '@/services/userService';
-import { Button, Col, Form, Input, notification, Row } from 'antd'
+import { Button, Col, Form, Input, Row } from 'antd'
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';

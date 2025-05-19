@@ -33,15 +33,7 @@ const ticketService = {
         userId: string,
         paymentMethod: string,
         voucher: string | undefined,
-        scheduleId: {
-            scheduleId: string;
-            startTime: string;
-            endTime: string;
-            busId: string;
-            licensePlate: string;
-            totalSeats: number;
-            seatNumber: string[];
-        },
+        scheduleId: string,
         seatNumbers: string[]
 
     }) => {

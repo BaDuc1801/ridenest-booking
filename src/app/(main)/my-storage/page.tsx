@@ -180,7 +180,7 @@ const UserStorage = () => {
                 rating: rating,
                 content: reviewContent,
                 ticketId: selectedTicket._id,
-                userId: user._id,
+                userId: user,
                 busId: selectedTicket.scheduleId.busId._id
             };
             await ticketService.addReview(newReview)
