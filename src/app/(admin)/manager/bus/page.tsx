@@ -70,6 +70,7 @@ const BusManager = () => {
             setLoading(false)
             toast.success('Xóa bus thành công');
         } catch (error) {
+            console.error(error);
             setLoading(false)
             toast.error('Lỗi khi xóa bus');
         }

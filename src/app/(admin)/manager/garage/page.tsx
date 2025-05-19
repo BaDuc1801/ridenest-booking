@@ -8,12 +8,18 @@ import { toast } from 'react-toastify';
 const AddGarage = () => {
     const [form] = Form.useForm();
 
-    const onFinish = async (value : any) => {
+    const onFinish = async (value: {
+        username: string;
+        email: string;
+        phoneNumber: string;
+        owner: string;
+    }) => {
         try {
             await userService.addOperator(value);
             toast.success('Thêm nhà xe thành công');
             form.resetFields();
         } catch (error) {
+            console.error(error);
             toast.error('Email chưa được đăng ký');
         }
     }

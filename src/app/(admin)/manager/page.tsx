@@ -3,17 +3,16 @@
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
-const page = () => {
-  const router = useRouter()
+const Page = () => {
+  const router = useRouter();
 
   useEffect(() => {
     router.push("/manager/users");
-  }, [])
+  }, []);
 
   return (
-    <div>
-    </div>
-  )
-}
+    <div></div>
+  );
+};
 
-export default page
+export default Page;

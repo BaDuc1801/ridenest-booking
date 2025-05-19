@@ -49,7 +49,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
         user?.role !== 'Operator' || !keysToRemoveForOperator.includes(item.key)
     );
 
-    const onClick = (e: any) => {
+    const onClick = (e: { key: string }) => {
         router.push(`/manager/${e.key}`);
     };
 
@@ -60,7 +60,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
     return (
         <div>
             <div className='w-screen text-white bg-blue-400 h-12 flex justify-start items-center'>
-                <MdHome className='text-3xl ml-5 cursor-pointer' onClick={() => router.push("/")}/>
+                <MdHome className='text-3xl ml-5 cursor-pointer' onClick={() => router.push("/")} />
             </div>
             <div className='flex h-[calc(100vh-48px)]'>
                 <Menu
