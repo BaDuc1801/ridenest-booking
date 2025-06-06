@@ -19,7 +19,7 @@ Deploy: https://ridenest-booking.vercel.app/
 
 ## Tài khoản nhân viên
 - Email: admin@gmail.com
-- Password: admin
+- Password: 123456
 
 ## Khởi chạy dự án
 npm run dev
